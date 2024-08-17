@@ -1,6 +1,6 @@
 <?php
 
-namespace UserManagementModule\Providers;
+namespace Nikitinuser\LaravelMakeAllExtended\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Nikitinuser\LaravelMakeAllExtended\Commands\MakeAllCommand;
