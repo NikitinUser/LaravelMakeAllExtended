@@ -1,0 +1,16 @@
+{
+    "name": "nikitinuser/laravel-make-all-extended",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Nikitinuser\\LaravelMakeAllExtended\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Vladimir Nikitin",
+            "email": "jo.kent@mail.ru"
+        }
+    ],
+    "require": {}
+}
