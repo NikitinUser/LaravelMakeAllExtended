@@ -2,7 +2,7 @@
 
 namespace %s;
 
-%s
+use %s;
 
 class $s
 {

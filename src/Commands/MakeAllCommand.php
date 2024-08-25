@@ -16,7 +16,6 @@ class MakeAllCommand extends Command
         {--sub_folders=0}
         {--api=1}
         {--invokable=0}
-        {--route=api}
     ';
 
     protected $description = 'command for creating:
@@ -64,7 +63,6 @@ class MakeAllCommand extends Command
         $dto->subFolders = $this->option('sub_folders');
         $dto->api = $this->option('api');
         $dto->invokable = $this->option('invokable');
-        $dto->route = $this->option('route');
 
         return $dto;
     }

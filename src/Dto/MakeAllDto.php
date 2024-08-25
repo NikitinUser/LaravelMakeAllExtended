@@ -10,5 +10,4 @@ class MakeAllDto
     public ?string $subFolders = null;
     public ?int $api = null;
     public ?int $invokable = null;
-    public ?string $route = null;
 }

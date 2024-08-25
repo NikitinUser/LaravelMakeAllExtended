@@ -24,6 +24,10 @@ class LaravelMakeAllExtendedProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->publishes([
+            __DIR__ . '/../make_all_extended.php' => config_path('make_all_extended.php'),
+        ]);
+
         if ($this->app->runningInConsole()) {
             $this->commands([
                 MakeAllCommand::class,

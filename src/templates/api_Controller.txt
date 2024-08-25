@@ -2,11 +2,22 @@
 
 namespace %s;
 
+use %s;
+use %s;
+use %s;
+use %s;
+use %s;
 use Illuminate\Http\Request;
-%s
 
 class %s extends Controller
 {
+    public function __construct(
+        %s
+        %s
+        %s
+    ) {
+    }
+
     /**
      * Display a listing of the resource.
      */
