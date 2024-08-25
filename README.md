@@ -12,7 +12,7 @@ composer require nikitinuser/laravel-make-all-extended
 add to app.php providers Nikitinuser\LaravelMakeAllExtended\Providers\LaravelMakeAllExtendedProvider::class,
 
 ```
-php artisan vendor:publish --provider="LaravelMakeAllExtended\Providers\LaravelMakeAllExtendedProvider"
+php artisan vendor:publish --provider="Nikitinuser\LaravelMakeAllExtended\Providers\LaravelMakeAllExtendedProvider"
 ```
 
 ## Usage
