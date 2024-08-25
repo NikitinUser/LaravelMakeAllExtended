@@ -7,7 +7,7 @@ use Nikitinuser\LaravelMakeAllExtended\Services\Makers\MakerInterface;
 
 abstract class BaseMaker implements MakerInterface
 {
-    public const TEMPLATES_FOLDER = '/../templates';
+    public const TEMPLATES_FOLDER = '/../../templates';
 
     protected TemplateDto $modelTemplateDto;
 
@@ -59,7 +59,7 @@ abstract class BaseMaker implements MakerInterface
         $dto = new TemplateDto();
 
         $dto->class = $name . $postfix;
-        $dto->namespace = $namespace . $subFolders;
+        $dto->namespace = $namespace . '\\' . $subFolders;
         $dto->relativePath = $path . $subFolders;
 
         return $dto;
@@ -73,7 +73,7 @@ abstract class BaseMaker implements MakerInterface
      */
     protected function getConstructorClassAttribute(string $class, string $mode = 'private'): string
     {
-        return $mode . ' ' . $class . ' ' . lcfirst($class);
+        return $mode . ' ' . $class . ' $' . lcfirst($class);
     }
 
     /**

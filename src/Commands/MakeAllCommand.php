@@ -42,7 +42,7 @@ class MakeAllCommand extends Command
             $progressBar->start();
             $progressBar->setFormat('debug');
 
-            ($this->makeall)($dto);
+            $this->makeall->handle($dto);
 
             $progressBar->advance();
             $progressBar->finish();

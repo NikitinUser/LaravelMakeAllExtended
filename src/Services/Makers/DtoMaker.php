@@ -48,7 +48,7 @@ class DtoMaker extends BaseMaker
         $attributes = '';
 
         foreach ($modelColumns as $name => $properties) {
-            $attributes .= 'public ?' . $properties['type_php'] . ' ' . $name . ' = null;\n\t\t\t';
+            $attributes .= "public ?" . $properties['type_php'] . ' ' . $name . " = null;\n\t\t\t";
         }
 
         return $attributes;

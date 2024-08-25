@@ -4,7 +4,7 @@ namespace %s;
 
 use %s;
 
-class $s
+class %s
 {
     protected $model;
 
