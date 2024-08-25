@@ -1,0 +1,23 @@
+<?php
+
+namespace %;
+
+%
+
+class $
+{
+    protected $model;
+
+    public function __construct()
+    {
+        $this->model = app()->make($this->model());
+    }
+
+    /**
+     * @return string
+     */
+    public function model()
+    {
+        return %::class;
+    }
+}

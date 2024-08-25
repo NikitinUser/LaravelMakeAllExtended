@@ -3,19 +3,19 @@
 namespace Nikitinuser\LaravelMakeAllExtended\Commands;
 
 use Illuminate\Console\Command;
-use Nikitinuser\LaravelMakeAllExtended\Services\MakeModel;
-use Nikitinuser\LaravelMakeAllExtended\Services\Parser;
+use Nikitinuser\LaravelMakeAllExtended\Dto\MakeAllDto;
+use Nikitinuser\LaravelMakeAllExtended\Services\MakeAll;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 class MakeAllCommand extends Command
 {
-    protected $signature = 'make:all_extended
-        {model_name}
+    protected $signature = 'make:all_extended {model_name}
         {--migration_filename=0}
         {--migration_path=0}
         {--sub_folders=0}
-        {--controller_mode=api}
+        {--api=1}
+        {--invokable=0}
         {--route=api}
     ';
 
@@ -24,9 +24,9 @@ class MakeAllCommand extends Command
         api, dto, request/response transformes based on migration';
 
     public function __construct(
-        private MakeModel $makeModel,
-        private Parser $parser,
+        private MakeAll $makeall
     ) {
+        parent::__construct();
     }
 
     /**
@@ -35,22 +35,15 @@ class MakeAllCommand extends Command
     public function handle(ConsoleOutput $output): int
     {
         try {
-            $modelName = $this->argument('model_name');
-            $migrationFilename = $this->option('migration_filename');
-            $migrationPath = $this->option('migration_path');
-            $subFolders = $this->option('sub_folders');
-            $controllerMode = $this->option('controller_mode');
-            $route = $this->option('route');
+            $dto = $this->getInputDto();
 
             $progressBar = new ProgressBar($output);
             $progressBar->start();
             $progressBar->setFormat('debug');
 
-            $columns = ($this->parser)($migrationFilename);
+            ($this->makeall)($dto);
+
             $progressBar->advance();
-
-            ($this->makeModel)($modelName, $columns, $subFolders);
-
             $progressBar->finish();
         } catch (\Throwable $t) {
             dump($t->getMessage());
@@ -59,5 +52,20 @@ class MakeAllCommand extends Command
 
         echo "\n";
         return 0;
+    }
+
+    private function getInputDto(): MakeAllDto
+    {
+        $dto = new MakeAllDto();
+
+        $dto->modelName = $this->argument('model_name');
+        $dto->migrationFilename = $this->option('migration_filename');
+        $dto->migrationPath = $this->option('migration_path');
+        $dto->subFolders = $this->option('sub_folders');
+        $dto->api = $this->option('api');
+        $dto->invokable = $this->option('invokable');
+        $dto->route = $this->option('route');
+
+        return $dto;
     }
 }

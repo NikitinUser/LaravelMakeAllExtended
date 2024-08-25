@@ -13,8 +13,6 @@ class Parser
     {
         $columns = [];
 
-        // $migrationPath = base_path() . "/database/migrations/" . $migrationFilename;
-
         $file = fopen($migrationPath, 'r');
         while (!feof($file)) {
             $line = fgets($file);
@@ -38,6 +36,15 @@ class Parser
                 $bufLine .= $line;
             }
 
+            if (
+                str_contains($bufLine, '->timestampsTz(')
+                || str_contains($bufLine, '->timestamps(')
+                || str_contains($bufLine, '->rememberToken(')
+                || str_contains($bufLine, '->nullableTimestamps(')
+            ) {
+                continue;
+            }
+
             $arrBufLine = explode("\n", $bufLine);
             $bufLine = "";
             for ($i = 0; $i < count($arrBufLine); $i++) {
@@ -52,20 +59,20 @@ class Parser
             if (empty(trim($substrArr[1] ?? ""))) {
                 $substrArr = explode("\"", $substr);
             }
-            $name = trim($substrArr[1] ?? "");
+            if (empty(trim($substrArr[1] ?? "")) && str_contains($substr, '::class')) {
+                $substrArr = explode(":", $substr);
+                $substrArr = explode("\\", $substrArr[0]);
+                $name = $substrArr[count($substrArr) - 1];
+                $name = lcfirst($name) . "_id";
+            } else {
+                $name = trim($substrArr[1] ?? "");
+            }
 
             $specificType = null;
             if (str_contains($bufLine, '->id(')) {
                 $specificType = "id";
-            } elseif (str_contains($bufLine, '->timestampsTz(')) {
-                $specificType = "timestampsTz";
-            } elseif (str_contains($bufLine, '->timestamps(')) {
-                $specificType = "timestamps";
-            } elseif (str_contains($bufLine, '->rememberToken(')) {
-                $specificType = "rememberToken";
-            } elseif (str_contains($bufLine, '->nullableTimestamps(')) {
-                $specificType = "nullableTimestamps";
             }
+
             if (!is_null($specificType)) {
                 $type = $specificType;
                 $name = $specificType;
@@ -79,10 +86,9 @@ class Parser
                 $bufArr = explode('>', $bufLine);
                 for ($i = 0; $i < count($bufArr); $i++) {
                     if (str_contains($bufArr[$i], 'default(')) {
-                        $default = explode("'", $bufArr[$i])[1] ?? "";
-                        if (empty($default)) {
-                            $default = explode("\"", $bufArr[$i])[1] ?? "";
-                        }
+                        $default = explode("(", $bufArr[$i])[1] ?? "";
+                        $default = explode(")", $default)[0] ?? "";
+                        break;
                     }
                 }
             }
