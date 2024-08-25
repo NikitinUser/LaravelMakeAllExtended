@@ -21,15 +21,18 @@ class MakeBase
 
     protected function saveFile(string $filename, string $template, string $basePath, string $subFolders = ''): void
     {
-        $savePath = app_path() . $basePath;
+        $savePath = app_path();
+        if (!is_dir($savePath)) {
+            mkdir($savePath);
+        }
+
         if (!empty($subFolders)) {
-            $subFoldersArr = explode('\\', $subFolders);
+            $subFoldersArr = explode('/', ($basePath . $subFolders));
             for ($i = 0; $i < count($subFoldersArr); $i++) {
+                $savePath .= $subFoldersArr[$i] . "/";
                 if (!is_dir($savePath)) {
                     mkdir($savePath);
                 }
-
-                $savePath .= $subFoldersArr[$i] . "/";
             }
         }
 

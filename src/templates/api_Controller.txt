@@ -1,11 +1,11 @@
 <?php
 
-namespace %;
+namespace %s;
 
 use Illuminate\Http\Request;
-%
+%s
 
-class % extends Controller
+class %s extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,7 +18,7 @@ class % extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(%)
+    public function store(%s)
     {
         //
     }
@@ -34,7 +34,7 @@ class % extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(%, string $id)
+    public function update(%s, string $id)
     {
         //
     }

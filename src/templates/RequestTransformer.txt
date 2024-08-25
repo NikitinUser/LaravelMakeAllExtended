@@ -1,10 +1,10 @@
 <?php
 
-namespace %;
+namespace %s;
 
 use App\Http\Transformers\AbstractRequestTransformer;
-use %;
+use %s;
 
-class % extends AbstractRequestTransformer
+class %s extends AbstractRequestTransformer
 {
 }

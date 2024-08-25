@@ -1,13 +1,13 @@
 <?php
 
-namespace %;
+namespace %s;
 
-%
+%s
 
-class %
+class %s
 {
     public function __construct(
-        %
+        %s
     ) {
     }
 }

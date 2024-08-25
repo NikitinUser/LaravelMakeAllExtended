@@ -1,10 +1,10 @@
 <?php
 
-namespace %;
+namespace %s;
 
 use Illuminate\Http\Request;
 
-class % extends Controller
+class %s extends Controller
 {
     /**
      * Handle the incoming request.
