@@ -12,19 +12,6 @@ class DtoStrategy extends BaseStrategy
     public const NAMESPACE_BASE = 'App\Dto';
     public const RELATIVE_PATH_BASE = '/Dto/';
 
-    private TemplateDto $modelTemplateDto;
-
-    /**
-     * @param TemplateDto $modelTemplateDto
-     *
-     * @return self
-     */
-    public function setModelTemplateDto(TemplateDto $modelTemplateDto): self
-    {
-        $this->modelTemplateDto = $modelTemplateDto;
-        return $this;
-    }
-
     /**
      * @param string $subFolders
      *
