@@ -65,9 +65,9 @@ class MakeAllCommand extends Command
         $dto->modelName = $this->argument('model_name');
         $dto->migrationFilename = $this->option('migration_filename');
         $dto->migrationPath = $this->option('migration_path');
-        $dto->subFolders = $this->option('sub_folders');
-        $dto->api = $this->option('api');
-        $dto->invokable = $this->option('invokable');
+        $dto->subFolders = $this->option('sub_folders') ?: null;
+        $dto->api = $this->option('api') ?: null;
+        $dto->invokable = $this->option('invokable') ?: null;
 
         return $dto;
     }

@@ -7,9 +7,9 @@ use Nikitinuser\LaravelMakeAllExtended\Dto\TemplateDto;
 interface MakerInterface
 {
     /**
-     * @param string $subFolders
+     * @param string|null $subFolders
      *
      * @return TemplateDto
      */
-    public function make(string $subFolders = ''): TemplateDto;
+    public function make(?string $subFolders = ''): TemplateDto;
 }
