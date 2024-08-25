@@ -7,6 +7,8 @@ use Nikitinuser\LaravelMakeAllExtended\Services\Makers\BaseController;
 
 class ApiControllerMaker extends BaseController
 {
+    public const TEMPLATE_FILE = '/api_Controller.txt';
+
     private TemplateDto $createRequestTemplate;
     private TemplateDto $updateRequestTemplate;
 

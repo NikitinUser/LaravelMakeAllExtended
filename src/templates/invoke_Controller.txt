@@ -10,8 +10,8 @@ use Illuminate\Http\Request;
 class %s extends Controller
 {
     public function __construct(
-        %s
-        %s
+        %s,
+        %s,
         %s
     ) {
     }

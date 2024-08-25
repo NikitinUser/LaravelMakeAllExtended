@@ -7,7 +7,6 @@ use Nikitinuser\LaravelMakeAllExtended\Services\Makers\BaseMaker;
 
 abstract class BaseController extends BaseMaker
 {
-    public const TEMPLATE_FILE = '/api_Controller.txt';
     public const POSTFIX = 'Controller';
     public const NAMESPACE_BASE = 'App\Http\Controllers';
     public const RELATIVE_PATH_BASE = '/Http/Controllers/';

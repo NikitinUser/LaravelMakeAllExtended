@@ -7,6 +7,8 @@ use Nikitinuser\LaravelMakeAllExtended\Services\Makers\BaseController;
 
 class InvokableControllerMaker extends BaseController
 {
+    public const TEMPLATE_FILE = '/invoke_Controller.txt';
+
     /**
      * @param string|null $subFolders
      *
