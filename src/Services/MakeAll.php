@@ -84,6 +84,17 @@ class MakeAll
             ->make($dto->subFolders);
         $this->templates[] = $dtoTemplate;
 
+        $serviceDto = $this->serviceMaker
+            ->setModelTemplateDto($modelDto)
+            ->setRepositoryTempalte($repoDto)
+            ->setDtoTemplate($dtoTemplate)
+            ->make($dto->subFolders);
+        $this->templates[] = $serviceDto;
+
+        if (empty($dto->api) && empty($dto->invokable)) {
+            return;
+        }
+
         $requestTransformerDto = $this->requestTransformerMaker
             ->setModelTemplateDto($modelDto)
             ->setDtoTemplate($dtoTemplate)
@@ -95,13 +106,6 @@ class MakeAll
             ->setDtoTemplate($dtoTemplate)
             ->make($dto->subFolders);
         $this->templates[] = $responseTransformerDto;
-
-        $serviceDto = $this->serviceMaker
-            ->setModelTemplateDto($modelDto)
-            ->setRepositoryTempalte($repoDto)
-            ->setDtoTemplate($dtoTemplate)
-            ->make($dto->subFolders);
-        $this->templates[] = $serviceDto;
 
         if (!empty($dto->api)) {
             $createRequestDto = $this->formRequestMaker
@@ -124,7 +128,7 @@ class MakeAll
                 ->setCreateRequestTemplate($createRequestDto)
                 ->setUpdateRequestTemplate($updateRequestDto)
                 ->make($dto->subFolders);
-        } elseif (!empty($dto->invokable)) {
+        } else {
             $this->templates[] = $this->invokableControllerMaker
                 ->setModelTemplateDto($modelDto)
                 ->setServiceTempalte($serviceDto)

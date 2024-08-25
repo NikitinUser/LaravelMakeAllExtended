@@ -14,7 +14,7 @@ class MakeAllCommand extends Command
         {--migration_filename=0}
         {--migration_path=0}
         {--sub_folders=0}
-        {--api=1}
+        {--api=0}
         {--invokable=0}
     ';
 
