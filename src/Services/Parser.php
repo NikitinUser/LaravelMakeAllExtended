@@ -16,8 +16,8 @@ class Parser
         $file = fopen($migrationPath, 'r');
         while (!feof($file)) {
             $line = fgets($file);
-            $type = "";
-            $name = "";
+            $type = '';
+            $name = '';
             $nullable = false;
             $default = null;
 
@@ -46,31 +46,31 @@ class Parser
             }
 
             $arrBufLine = explode("\n", $bufLine);
-            $bufLine = "";
+            $bufLine = '';
             for ($i = 0; $i < count($arrBufLine); $i++) {
                 $bufLine .= trim($arrBufLine[$i]);
             }
             unset($arrBufLine);
 
-            $substr = trim(explode('>', $bufLine)[1] ?? "");
-            $type = trim((explode('(', $substr)[0] ?? ""));
-            $substr = trim((explode('(', $substr)[1] ?? ""));
+            $substr = trim(explode('>', $bufLine)[1] ?? '');
+            $type = trim((explode('(', $substr)[0] ?? ''));
+            $substr = trim((explode('(', $substr)[1] ?? ''));
             $substrArr = explode("'", $substr);
-            if (empty(trim($substrArr[1] ?? ""))) {
+            if (empty(trim($substrArr[1] ?? ''))) {
                 $substrArr = explode("\"", $substr);
             }
-            if (empty(trim($substrArr[1] ?? "")) && str_contains($substr, '::class')) {
-                $substrArr = explode(":", $substr);
+            if (empty(trim($substrArr[1] ?? '')) && str_contains($substr, '::class')) {
+                $substrArr = explode(':', $substr);
                 $substrArr = explode("\\", $substrArr[0]);
                 $name = $substrArr[count($substrArr) - 1];
-                $name = lcfirst($name) . "_id";
+                $name = lcfirst($name) . '_id';
             } else {
-                $name = trim($substrArr[1] ?? "");
+                $name = trim($substrArr[1] ?? '');
             }
 
             $specificType = null;
             if (str_contains($bufLine, '->id(')) {
-                $specificType = "id";
+                $specificType = 'id';
             }
 
             if (!is_null($specificType)) {
@@ -86,28 +86,28 @@ class Parser
                 $bufArr = explode('>', $bufLine);
                 for ($i = 0; $i < count($bufArr); $i++) {
                     if (str_contains($bufArr[$i], 'default(')) {
-                        $default = explode("(", $bufArr[$i])[1] ?? "";
-                        $default = explode(")", $default)[0] ?? "";
+                        $default = explode('(', $bufArr[$i])[1] ?? '';
+                        $default = explode(')', $default)[0] ?? '';
                         break;
                     }
                 }
             }
 
-            $typePhp = "";
+            $typePhp = '';
             if ($type === 'boolean') {
-                $typePhp = "bool";
+                $typePhp = 'bool';
             } elseif (in_array($type, ['float', 'decimal', 'double'])) {
-                $typePhp = "float";
+                $typePhp = 'float';
             } elseif (in_array($type, ['enum', 'json', 'jsonb', 'set'])) {
-                $typePhp = "array";
+                $typePhp = 'array';
             } elseif (
                 str_contains($type, 'ncrement')
                 || str_contains($type, 'int')
                 || in_array($type, ['id', 'foreignId', 'foreignIdFor'])
             ) {
-                $typePhp = "int";
+                $typePhp = 'int';
             } else {
-                $typePhp = "string";
+                $typePhp = 'string';
             }
 
             $nameArr = explode('_', $name);
@@ -118,11 +118,11 @@ class Parser
             }
 
             $columns[$name] = [
-                "type" => $type,
-                "type_php" => $typePhp,
-                "nullable" => $nullable,
-                "default" => $default,
-                "name_php" => $namePhp,
+                'type' => $type,
+                'type_php' => $typePhp,
+                'nullable' => $nullable,
+                'default' => $default,
+                'name_php' => $namePhp,
             ];
         }
         fclose($file);

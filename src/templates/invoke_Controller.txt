@@ -2,10 +2,20 @@
 
 namespace %s;
 
+use %s;
+use %s;
+use %s;
 use Illuminate\Http\Request;
 
 class %s extends Controller
 {
+    public function __construct(
+        %s
+        %s
+        %s
+    ) {
+    }
+
     /**
      * Handle the incoming request.
      */

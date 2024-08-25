@@ -3,84 +3,164 @@
 namespace Nikitinuser\LaravelMakeAllExtended\Services;
 
 use Nikitinuser\LaravelMakeAllExtended\Dto\MakeAllDto;
-use Nikitinuser\LaravelMakeAllExtended\Services\MakeApiController;
-use Nikitinuser\LaravelMakeAllExtended\Services\MakeDto;
-use Nikitinuser\LaravelMakeAllExtended\Services\MakeFactory;
-use Nikitinuser\LaravelMakeAllExtended\Services\MakeInvokableController;
-use Nikitinuser\LaravelMakeAllExtended\Services\MakeFormRequest;
-use Nikitinuser\LaravelMakeAllExtended\Services\MakeModel;
-use Nikitinuser\LaravelMakeAllExtended\Services\MakeRepository;
-use Nikitinuser\LaravelMakeAllExtended\Services\MakeRequestTransformer;
-use Nikitinuser\LaravelMakeAllExtended\Services\MakeResponseTransformer;
-use Nikitinuser\LaravelMakeAllExtended\Services\MakeSeed;
-use Nikitinuser\LaravelMakeAllExtended\Services\MakeService;
+use Nikitinuser\LaravelMakeAllExtended\Helpers\Saver;
+use Nikitinuser\LaravelMakeAllExtended\Services\Makers\ApiControllerMaker;
+use Nikitinuser\LaravelMakeAllExtended\Services\Makers\DtoMaker;
+use Nikitinuser\LaravelMakeAllExtended\Services\Makers\FactoryMaker;
+use Nikitinuser\LaravelMakeAllExtended\Services\Makers\InvokableControllerMaker;
+use Nikitinuser\LaravelMakeAllExtended\Services\Makers\FormRequestMaker;
+use Nikitinuser\LaravelMakeAllExtended\Services\Makers\ModelMaker;
+use Nikitinuser\LaravelMakeAllExtended\Services\Makers\RepositoryMaker;
+use Nikitinuser\LaravelMakeAllExtended\Services\Makers\RequestTransformerMaker;
+use Nikitinuser\LaravelMakeAllExtended\Services\Makers\ResponseTransformerMaker;
+use Nikitinuser\LaravelMakeAllExtended\Services\Makers\SeedMaker;
+use Nikitinuser\LaravelMakeAllExtended\Services\Makers\ServiceMaker;
 use Nikitinuser\LaravelMakeAllExtended\Services\Parser;
 
 class MakeAll
 {
+    private array $templates = [];
+
     public function __construct(
-        private MakeApiController $makeApiController,
-        private MakeDto $makeDto,
-        private MakeFactory $makeFactory,
-        private MakeInvokableController $makeInvokableController,
-        private MakeFormRequest $makeFormRequest,
-        private MakeModel $makeModel,
-        private MakeRepository $makeRepository,
-        private MakeRequestTransformer $makeRequestTransformer,
-        private MakeResponseTransformer $makeResponseTransformer,
-        private MakeSeed $makeSeed,
-        private MakeService $makeService,
-        private Parser $parser,
+        private ApiControllerMaker $apiControllerMaker,
+        private DtoMaker $dtoMaker,
+        private FactoryMaker $factoryMaker,
+        private InvokableControllerMaker $invokableControllerMaker,
+        private FormRequestMaker $formRequestMaker,
+        private ModelMaker $modelMaker,
+        private RepositoryMaker $repositoryMaker,
+        private RequestTransformerMaker $requestTransformerMaker,
+        private ResponseTransformerMaker $responseTransformerMaker,
+        private SeedMaker $seedMaker,
+        private ServiceMaker $serviceMaker,
+        private Parser $parser
     ) {
     }
 
-    public function __invoke(MakeAllDto $dto)
+    /**
+     * @param MakeAllDto $dto
+     *
+     * @return void
+     */
+    public function handle(MakeAllDto $dto): void
+    {
+        $this->makeDtos($dto);
+        $this->saveTemplates();
+    }
+
+    /**
+     * @param MakeAllDto $dto
+     *
+     * @return void
+     */
+    public function makeDtos(MakeAllDto $dto): void
     {
         $path = $this->getMigrationPath($dto->migrationFilename, $dto->migrationPath);
 
         $columns = ($this->parser)($path);
 
-        $modelInfo = ($this->makeModel)($dto->modelName, $columns, $dto->subFolders);
-        $factoryInfo = ($this->makeFactory)($dto->modelName, $modelInfo['namespace']);
-        $seedInfo = ($this->makeSeed)($dto->modelName, $modelInfo['namespace']);
-        $repoInfo = ($this->makeRepository)($dto->modelName, $modelInfo['namespace'], $dto->subFolders);
+        $modelDto = $this->modelMaker
+            ->setColumns($columns)
+            ->setModelName($dto->modelName)
+            ->make($dto->subFolders);
+        $this->templates[] = $modelDto;
+        unset($columns);
 
-        $dtoInfo = ($this->makeDto)($dto->modelName, $columns, $dto->subFolders);
-        $requestTransformerInfo = ($this->makeRequestTransformer)(
-            $dto->modelName,
-            $dtoInfo['namespace'],
-            $dtoInfo['className'],
-            $dto->subFolders
-        );
-        $responseTransformerInfo = ($this->makeResponseTransformer)(
-            $dto->modelName,
-            $dtoInfo['namespace'],
-            $dtoInfo['className'],
-            $dto->subFolders
-        );
+        $this->templates[] = $this->factoryMaker
+            ->setModelTemplateDto($modelDto)
+            ->make();
 
-        $serviceInfo = ($this->makeService)($dto->modelName, $repoInfo['namespace'], $repoInfo['className'], $dto->subFolders);
+        $this->templates[] = $this->seedMaker
+            ->setModelTemplateDto($modelDto)
+            ->make();
 
-        $formrequestInfo = ($this->makeFormRequest)($dto->modelName, $dto->subFolders);
+        $repoDto = $this->repositoryMaker
+            ->setModelTemplateDto($modelDto)
+            ->make($dto->subFolders);
+        $this->templates[] = $repoDto;
+
+        $dtoTemplate = $this->dtoMaker
+            ->setModelTemplateDto($modelDto)
+            ->make($dto->subFolders);
+        $this->templates[] = $dtoTemplate;
+
+        $serviceDto = $this->serviceMaker
+            ->setModelTemplateDto($modelDto)
+            ->setRepositoryTempalte($repoDto)
+            ->setDtoTemplate($dtoTemplate)
+            ->make($dto->subFolders);
+        $this->templates[] = $serviceDto;
+
+        if (empty($dto->api) && empty($dto->invokable)) {
+            return;
+        }
+
+        $requestTransformerDto = $this->requestTransformerMaker
+            ->setModelTemplateDto($modelDto)
+            ->setDtoTemplate($dtoTemplate)
+            ->make($dto->subFolders);
+        $this->templates[] = $requestTransformerDto;
+
+        $responseTransformerDto = $this->responseTransformerMaker
+            ->setModelTemplateDto($modelDto)
+            ->setDtoTemplate($dtoTemplate)
+            ->make($dto->subFolders);
+        $this->templates[] = $responseTransformerDto;
 
         if (!empty($dto->api)) {
-            $controllerInfo = ($this->makeApiController)($dto->modelName, $dto->subFolders);
+            $createRequestDto = $this->formRequestMaker
+                ->setModelTemplateDto($modelDto)
+                ->setPrefix(FormRequestMaker::CREATE_PREFIX)
+                ->make($dto->subFolders);
+            $this->templates[] = $createRequestDto;
 
-            if (!empty($dto->route)) {
-                // Todo
-            }
-        } elseif (!empty($dto->invokable)) {
-            $controllerInfo = ($this->makeInvokableController)($dto->modelName, $dto->subFolders);
+            $updateRequestDto = $this->formRequestMaker
+                ->setModelTemplateDto($modelDto)
+                ->setPrefix(FormRequestMaker::UPDATE_PREFIX)
+                ->make($dto->subFolders);
+            $this->templates[] = $updateRequestDto;
+
+            $this->templates[] = $this->apiControllerMaker
+                ->setModelTemplateDto($modelDto)
+                ->setServiceTempalte($serviceDto)
+                ->setRequestTrnasformerTemplate($requestTransformerDto)
+                ->setResponseTrnasformerTemplate($responseTransformerDto)
+                ->setCreateRequestTemplate($createRequestDto)
+                ->setUpdateRequestTemplate($updateRequestDto)
+                ->make($dto->subFolders);
+        } else {
+            $this->templates[] = $this->invokableControllerMaker
+                ->setModelTemplateDto($modelDto)
+                ->setServiceTempalte($serviceDto)
+                ->setRequestTrnasformerTemplate($requestTransformerDto)
+                ->setResponseTrnasformerTemplate($responseTransformerDto)
+                ->make($dto->subFolders);
         }
     }
 
+    /**
+     * @return void
+     */
+    private function saveTemplates()
+    {
+        foreach ($this->templates as $dto) {
+            Saver::save($dto);
+        }
+    }
+
+    /**
+     * @param string $migrationFilename
+     * @param string $migrationPath
+     *
+     * @return string
+     */
     private function getMigrationPath(string $migrationFilename = '', string $migrationPath = ''): string
     {
-        $path = base_path();
+        $path = config('make_all_extended.base_path');
         if (!empty($migrationPath)) {
             $path .= $migrationPath;
         } elseif (!empty($migrationFilename)) {
-            $path .= "/database/migrations/" . $migrationFilename;
+            $path .= config('make_all_extended.migrations_relative_path') . $migrationFilename;
         } else {
             throw new \Exception('fill migration_filename or migration_path options');
         }

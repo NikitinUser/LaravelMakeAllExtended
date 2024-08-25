@@ -14,14 +14,13 @@ class MakeAllCommand extends Command
         {--migration_filename=0}
         {--migration_path=0}
         {--sub_folders=0}
-        {--api=1}
+        {--api=0}
         {--invokable=0}
-        {--route=api}
     ';
 
     protected $description = 'command for creating:
         model, seed, factory, repository, service, controller, formrequest,
-        api, dto, request/response transformes based on migration';
+        dto, request/response transformes based on migration';
 
     public function __construct(
         private MakeAll $makeall
@@ -30,7 +29,9 @@ class MakeAllCommand extends Command
     }
 
     /**
-     * Execute the console command.
+     * @param ConsoleOutput $output
+     *
+     * @return int
      */
     public function handle(ConsoleOutput $output): int
     {
@@ -54,6 +55,9 @@ class MakeAllCommand extends Command
         return 0;
     }
 
+    /**
+     * @return MakeAllDto
+     */
     private function getInputDto(): MakeAllDto
     {
         $dto = new MakeAllDto();
@@ -64,7 +68,6 @@ class MakeAllCommand extends Command
         $dto->subFolders = $this->option('sub_folders');
         $dto->api = $this->option('api');
         $dto->invokable = $this->option('invokable');
-        $dto->route = $this->option('route');
 
         return $dto;
     }
