@@ -38,11 +38,11 @@ class ModelMaker extends BaseMaker
     }
 
     /**
-     * @param string $subFolders
+     * @param string|null $subFolders
      *
      * @return TemplateDto
      */
-    public function make(string $subFolders = ''): TemplateDto
+    public function make(?string $subFolders = ''): TemplateDto
     {
         $template = $this->getTemplate(self::TEMPLATE_FILE);
         $dto = $this->getDto(

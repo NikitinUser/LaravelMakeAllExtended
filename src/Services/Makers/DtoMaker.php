@@ -13,11 +13,11 @@ class DtoMaker extends BaseMaker
     public const RELATIVE_PATH_BASE = '/Dto/';
 
     /**
-     * @param string $subFolders
+     * @param string|null $subFolders
      *
      * @return TemplateDto
      */
-    public function make(string $subFolders = ''): TemplateDto
+    public function make(?string $subFolders = ''): TemplateDto
     {
         $template = $this->getTemplate(self::TEMPLATE_FILE);
         $dto = $this->getDto(
@@ -48,7 +48,7 @@ class DtoMaker extends BaseMaker
         $attributes = '';
 
         foreach ($modelColumns as $name => $properties) {
-            $attributes .= "public ?" . $properties['type_php'] . ' ' . $name . " = null;\n\t\t\t";
+            $attributes .= "public ?" . $properties['type_php'] . ' $' . $name . " = null;\n\t";
         }
 
         return $attributes;

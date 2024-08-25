@@ -12,11 +12,11 @@ abstract class BaseMaker implements MakerInterface
     protected TemplateDto $modelTemplateDto;
 
     /**
-     * @param string $subFolders
+     * @param string|null $subFolders
      *
      * @return TemplateDto
      */
-    abstract public function make(string $subFolders = ''): TemplateDto;
+    abstract public function make(?string $subFolders = ''): TemplateDto;
 
     /**
      * @param TemplateDto $modelTemplateDto
@@ -45,7 +45,7 @@ abstract class BaseMaker implements MakerInterface
      * @param string $postfix
      * @param string $namespace
      * @param string $path
-     * @param string $subFolders
+     * @param string|null $subFolders
      *
      * @return TemplateDto
      */
@@ -54,12 +54,17 @@ abstract class BaseMaker implements MakerInterface
         string $postfix,
         string $namespace,
         string $path,
-        string $subFolders
+        ?string $subFolders
     ): TemplateDto {
         $dto = new TemplateDto();
 
         $dto->class = $name . $postfix;
-        $dto->namespace = $namespace . '\\' . $subFolders;
+
+        $dto->namespace = $namespace;
+        if (!empty($subFolders)) {
+            $dto->namespace .= '\\' . $subFolders;
+        }
+
         $dto->relativePath = $path . $subFolders;
 
         return $dto;
@@ -83,6 +88,6 @@ abstract class BaseMaker implements MakerInterface
      */
     protected function getClassMethodAsParam(string $class): string
     {
-        return $class . ' ' . lcfirst($class);
+        return $class . ' $' . lcfirst($class);
     }
 }
