@@ -20,7 +20,7 @@ class MakeAllCommand extends Command
 
     protected $description = 'command for creating:
         model, seed, factory, repository, service, controller, formrequest,
-        api, dto, request/response transformes based on migration';
+        dto, request/response transformes based on migration';
 
     public function __construct(
         private MakeAll $makeall
@@ -29,7 +29,9 @@ class MakeAllCommand extends Command
     }
 
     /**
-     * Execute the console command.
+     * @param ConsoleOutput $output
+     *
+     * @return int
      */
     public function handle(ConsoleOutput $output): int
     {
@@ -53,6 +55,9 @@ class MakeAllCommand extends Command
         return 0;
     }
 
+    /**
+     * @return MakeAllDto
+     */
     private function getInputDto(): MakeAllDto
     {
         $dto = new MakeAllDto();

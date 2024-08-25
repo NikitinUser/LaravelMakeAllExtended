@@ -1,16 +1,16 @@
 <?php
 
-namespace Nikitinuser\LaravelMakeAllExtended\Services\Strategies;
+namespace Nikitinuser\LaravelMakeAllExtended\Services\Makers;
 
 use Nikitinuser\LaravelMakeAllExtended\Dto\TemplateDto;
-use Nikitinuser\LaravelMakeAllExtended\Services\Strategies\BaseStrategy;
+use Nikitinuser\LaravelMakeAllExtended\Services\Makers\BaseMaker;
 
-class SeedStrategy extends BaseStrategy
+class RepositoryMaker extends BaseMaker
 {
-    public const TEMPLATE_FILE = '/Seeder.txt';
-    public const POSTFIX = 'Seeder';
-    public const NAMESPACE_BASE = 'Database\Seeders';
-    public const RELATIVE_PATH_BASE = '/../database/seeders/';
+    public const TEMPLATE_FILE = '/Repository.txt';
+    public const POSTFIX = 'Repository';
+    public const NAMESPACE_BASE = 'App\Repositories';
+    public const RELATIVE_PATH_BASE = '/Repositories/';
 
     /**
      * @param string $subFolders
@@ -30,8 +30,10 @@ class SeedStrategy extends BaseStrategy
 
         $dto->content = sprintf(
             $template,
+            $dto->namespace,
+            $this->modelTemplateDto->namespace . '\\' . $this->modelTemplateDto->class,
             $dto->class,
-            '// Todo'
+            $this->modelTemplateDto->class
         );
 
         return $dto;

@@ -1,47 +1,31 @@
 <?php
 
-namespace Nikitinuser\LaravelMakeAllExtended\Services\Strategies;
+namespace Nikitinuser\LaravelMakeAllExtended\Services\Makers;
 
 use Nikitinuser\LaravelMakeAllExtended\Dto\TemplateDto;
-use Nikitinuser\LaravelMakeAllExtended\Services\Strategies\BaseStrategy;
+use Nikitinuser\LaravelMakeAllExtended\Services\Makers\BaseController;
 
-class ApiControllerStrategy extends BaseStrategy
+class ApiControllerMaker extends BaseController
 {
-    public const TEMPLATE_FILE = '/api_Controller.txt';
-    public const POSTFIX = 'Controller';
-    public const NAMESPACE_BASE = 'App\Http\Controllers';
-    public const RELATIVE_PATH_BASE = '/Http/Controllers/';
-
-    private TemplateDto $serviceTemplate;
-    private TemplateDto $requestTrnasformerTemplate;
-    private TemplateDto $responseTrnasformerTemplate;
     private TemplateDto $createRequestTemplate;
     private TemplateDto $updateRequestTemplate;
 
-    public function setServiceTempalte(TemplateDto $serviceTemplate): self
-    {
-        $this->serviceTemplate = $serviceTemplate;
-        return $this;
-    }
-
-    public function setRequestTrnasformerTemplate(TemplateDto $requestTrnasformerTemplate): self
-    {
-        $this->requestTrnasformerTemplate = $requestTrnasformerTemplate;
-        return $this;
-    }
-
-    public function setResponseTrnasformerTemplate(TemplateDto $responseTrnasformerTemplate): self
-    {
-        $this->responseTrnasformerTemplate = $responseTrnasformerTemplate;
-        return $this;
-    }
-
+    /**
+     * @param TemplateDto $createRequestTemplate
+     *
+     * @return self
+     */
     public function setCreateRequestTemplate(TemplateDto $createRequestTemplate): self
     {
         $this->createRequestTemplate = $createRequestTemplate;
         return $this;
     }
 
+    /**
+     * @param TemplateDto $updateRequestTemplate
+     *
+     * @return self
+     */
     public function setUpdateRequestTemplate(TemplateDto $updateRequestTemplate): self
     {
         $this->updateRequestTemplate = $updateRequestTemplate;
@@ -76,20 +60,10 @@ class ApiControllerStrategy extends BaseStrategy
             $this->getConstructorClassAttribute($this->serviceTemplate->class),
             $this->getConstructorClassAttribute($this->requestTrnasformerTemplate->class),
             $this->getConstructorClassAttribute($this->responseTrnasformerTemplate->class),
-            $this->getCreateFormRequest(),
-            $this->getUpdateFormRequest()
+            $this->getClassMethodAsParam($this->createRequestTemplate->class),
+            $this->getClassMethodAsParam($this->updateRequestTemplate->class)
         );
 
         return $dto;
-    }
-
-    private function getCreateFormRequest(): string
-    {
-        return $this->createRequestTemplate->class . ' ' . lcfirst($this->createRequestTemplate->class);
-    }
-
-    private function getUpdateFormRequest(): string
-    {
-        return $this->updateRequestTemplate->class . ' ' . lcfirst($this->updateRequestTemplate->class);
     }
 }

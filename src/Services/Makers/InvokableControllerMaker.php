@@ -1,39 +1,12 @@
 <?php
 
-namespace Nikitinuser\LaravelMakeAllExtended\Services\Strategies;
+namespace Nikitinuser\LaravelMakeAllExtended\Services\Makers;
 
 use Nikitinuser\LaravelMakeAllExtended\Dto\TemplateDto;
-use Nikitinuser\LaravelMakeAllExtended\Services\Strategies\BaseStrategy;
+use Nikitinuser\LaravelMakeAllExtended\Services\Makers\BaseController;
 
-class InvokableControllerStrategy extends BaseStrategy
+class InvokableControllerMaker extends BaseController
 {
-    public const TEMPLATE_FILE = '/invoke_Controller.txt';
-    public const POSTFIX = 'Controller';
-    public const NAMESPACE_BASE = 'App\Http\Controllers';
-    public const RELATIVE_PATH_BASE = '/Http/Controllers/';
-
-    private TemplateDto $serviceTemplate;
-    private TemplateDto $requestTrnasformerTemplate;
-    private TemplateDto $responseTrnasformerTemplate;
-
-    public function setServiceTempalte(TemplateDto $serviceTemplate): self
-    {
-        $this->serviceTemplate = $serviceTemplate;
-        return $this;
-    }
-
-    public function setRequestTrnasformerTemplate(TemplateDto $requestTrnasformerTemplate): self
-    {
-        $this->requestTrnasformerTemplate = $requestTrnasformerTemplate;
-        return $this;
-    }
-
-    public function setResponseTrnasformerTemplate(TemplateDto $responseTrnasformerTemplate): self
-    {
-        $this->responseTrnasformerTemplate = $responseTrnasformerTemplate;
-        return $this;
-    }
-
     /**
      * @param string $subFolders
      *

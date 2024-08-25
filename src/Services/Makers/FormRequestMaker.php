@@ -1,11 +1,11 @@
 <?php
 
-namespace Nikitinuser\LaravelMakeAllExtended\Services\Strategies;
+namespace Nikitinuser\LaravelMakeAllExtended\Services\Makers;
 
 use Nikitinuser\LaravelMakeAllExtended\Dto\TemplateDto;
-use Nikitinuser\LaravelMakeAllExtended\Services\Strategies\BaseStrategy;
+use Nikitinuser\LaravelMakeAllExtended\Services\Makers\BaseMaker;
 
-class FormRequestStrategy extends BaseStrategy
+class FormRequestMaker extends BaseMaker
 {
     public const TEMPLATE_FILE = '/FormRequest.txt';
     public const POSTFIX = 'Request';
@@ -17,6 +17,11 @@ class FormRequestStrategy extends BaseStrategy
 
     private string $prefix = '';
 
+    /**
+     * @param string $prefix
+     *
+     * @return self
+     */
     public function setPrefix(string $prefix): self
     {
         $this->prefix = $prefix;
@@ -51,6 +56,9 @@ class FormRequestStrategy extends BaseStrategy
         return $dto;
     }
 
+    /**
+     * @return string
+     */
     private function getRules(): string
     {
         $rules = '';

@@ -1,11 +1,11 @@
 <?php
 
-namespace Nikitinuser\LaravelMakeAllExtended\Services\Strategies;
+namespace Nikitinuser\LaravelMakeAllExtended\Services\Makers;
 
 use Nikitinuser\LaravelMakeAllExtended\Dto\TemplateDto;
-use Nikitinuser\LaravelMakeAllExtended\Services\Strategies\BaseStrategy;
+use Nikitinuser\LaravelMakeAllExtended\Services\Makers\BaseMaker;
 
-class DtoStrategy extends BaseStrategy
+class DtoMaker extends BaseMaker
 {
     public const TEMPLATE_FILE = '/Dto.txt';
     public const POSTFIX = 'Dto';
@@ -38,6 +38,11 @@ class DtoStrategy extends BaseStrategy
         return $dto;
     }
 
+    /**
+     * @param array $modelColumns
+     *
+     * @return string
+     */
     private function getAttributes(array $modelColumns): string
     {
         $attributes = '';

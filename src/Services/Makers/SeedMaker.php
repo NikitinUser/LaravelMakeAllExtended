@@ -1,16 +1,16 @@
 <?php
 
-namespace Nikitinuser\LaravelMakeAllExtended\Services\Strategies;
+namespace Nikitinuser\LaravelMakeAllExtended\Services\Makers;
 
 use Nikitinuser\LaravelMakeAllExtended\Dto\TemplateDto;
-use Nikitinuser\LaravelMakeAllExtended\Services\Strategies\BaseStrategy;
+use Nikitinuser\LaravelMakeAllExtended\Services\Makers\BaseMaker;
 
-class FactoryStrategy extends BaseStrategy
+class SeedMaker extends BaseMaker
 {
-    public const TEMPLATE_FILE = '/Factory.txt';
-    public const POSTFIX = 'Factory';
-    public const NAMESPACE_BASE = 'Database\Factories';
-    public const RELATIVE_PATH_BASE = '/../database/factories/';
+    public const TEMPLATE_FILE = '/Seeder.txt';
+    public const POSTFIX = 'Seeder';
+    public const NAMESPACE_BASE = 'Database\Seeders';
+    public const RELATIVE_PATH_BASE = '/../database/seeders/';
 
     /**
      * @param string $subFolders
@@ -30,7 +30,6 @@ class FactoryStrategy extends BaseStrategy
 
         $dto->content = sprintf(
             $template,
-            $this->modelTemplateDto->namespace . '\\' . $this->modelTemplateDto->class,
             $dto->class,
             '// Todo'
         );

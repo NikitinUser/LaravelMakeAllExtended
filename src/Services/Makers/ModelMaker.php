@@ -1,11 +1,11 @@
 <?php
 
-namespace Nikitinuser\LaravelMakeAllExtended\Services\Strategies;
+namespace Nikitinuser\LaravelMakeAllExtended\Services\Makers;
 
 use Nikitinuser\LaravelMakeAllExtended\Dto\TemplateDto;
-use Nikitinuser\LaravelMakeAllExtended\Services\Strategies\BaseStrategy;
+use Nikitinuser\LaravelMakeAllExtended\Services\Makers\BaseMaker;
 
-class ModelStrategy extends BaseStrategy
+class ModelMaker extends BaseMaker
 {
     public const TEMPLATE_FILE = '/Model.txt';
     public const POSTFIX = '';
@@ -15,12 +15,22 @@ class ModelStrategy extends BaseStrategy
     private array $columns;
     private string $modelName;
 
+    /**
+     * @param array $columns
+     *
+     * @return self
+     */
     public function setColumns(array $columns): self
     {
         $this->columns = $columns;
         return $this;
     }
 
+    /**
+     * @param string $modelName
+     *
+     * @return self
+     */
     public function setModelName(string $modelName): self
     {
         $this->modelName = $modelName;
@@ -57,6 +67,11 @@ class ModelStrategy extends BaseStrategy
         return $dto;
     }
 
+    /**
+     * @param array $modelColumns
+     *
+     * @return string
+     */
     private function getAttributes(array $modelColumns): string
     {
         $attributes = '';
@@ -69,6 +84,11 @@ class ModelStrategy extends BaseStrategy
         return trim($attributes);
     }
 
+    /**
+     * @param array $modelColumns
+     *
+     * @return string
+     */
     private function getCasts(array $modelColumns): string
     {
         $casts = '';
@@ -81,6 +101,11 @@ class ModelStrategy extends BaseStrategy
         return trim($casts);
     }
 
+    /**
+     * @param array $modelColumns
+     *
+     * @return string
+     */
     private function getFillable(array $modelColumns): string
     {
         $fillable = '';

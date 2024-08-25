@@ -1,11 +1,11 @@
 <?php
 
-namespace Nikitinuser\LaravelMakeAllExtended\Services\Strategies;
+namespace Nikitinuser\LaravelMakeAllExtended\Services\Makers;
 
 use Nikitinuser\LaravelMakeAllExtended\Dto\TemplateDto;
-use Nikitinuser\LaravelMakeAllExtended\Services\Strategies\BaseStrategy;
+use Nikitinuser\LaravelMakeAllExtended\Services\Makers\BaseMaker;
 
-class ServiceStrategy extends BaseStrategy
+class ServiceMaker extends BaseMaker
 {
     public const TEMPLATE_FILE = '/Service.txt';
     public const POSTFIX = 'Service';
@@ -15,12 +15,22 @@ class ServiceStrategy extends BaseStrategy
     private TemplateDto $repositoryTemplate;
     private TemplateDto $dtoTemplate;
 
+    /**
+     * @param TemplateDto $repositoryTemplate
+     *
+     * @return self
+     */
     public function setRepositoryTempalte(TemplateDto $repositoryTemplate): self
     {
         $this->repositoryTemplate = $repositoryTemplate;
         return $this;
     }
 
+    /**
+     * @param TemplateDto $dtoTemplate
+     *
+     * @return self
+     */
     public function setDtoTemplate(TemplateDto $dtoTemplate): self
     {
         $this->dtoTemplate = $dtoTemplate;

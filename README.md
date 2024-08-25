@@ -15,8 +15,3 @@ laravel command for creating:
     --sub_folders=Bank\Account // optional, use if you need create sub folders and specific namespaces 
     --api=1 // default, optional, use if you need api methods in controller
     --invokable=0 // optional, use if you need invokable controller, not working if exist api option
-
-
-    команды создания одиночных файлов
-    рефакторинг
-    документация
