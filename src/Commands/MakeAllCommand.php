@@ -22,18 +22,12 @@ class MakeAllCommand extends Command
         model, seed, factory, repository, service, controller, formrequest,
         dto, request/response transformes based on migration';
 
-    public function __construct(
-        private MakeAll $makeall
-    ) {
-        parent::__construct();
-    }
-
     /**
      * @param ConsoleOutput $output
      *
      * @return int
      */
-    public function handle(ConsoleOutput $output): int
+    public function handle(ConsoleOutput $output, MakeAll $makeall): int
     {
         try {
             $dto = $this->getInputDto();
@@ -42,7 +36,7 @@ class MakeAllCommand extends Command
             $progressBar->start();
             $progressBar->setFormat('debug');
 
-            $this->makeall->handle($dto);
+            $makeall->handle($dto);
 
             $progressBar->advance();
             $progressBar->finish();
